@@ -9,7 +9,7 @@ using MVC02.Abdallah.DAL.Models;
 
 namespace MVC02.Abdallah.DAL.Data.Configrations
 {
-    internal class DeparmentConfigrations : IEntityTypeConfiguration<Department>
+    public class DeparmentConfigrations : IEntityTypeConfiguration<Department>
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
