@@ -1,24 +1,23 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MVC02.Abdallah.BLL.Interfaces;
-using MVC02.Abdallah.BLL.Reposatiries;
 using MVC02.Abdallah.DAL.Models;
 using MVC02.Abdallah.PL.Dtos;
 
 namespace MVC02.Abdallah.PL.Controllers
 {
-    public class DepartmentContoller : Controller
+    public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentReposatory;
-        public DepartmentContoller(IDepartmentRepository departmentReposatory)
+        private readonly IDepartmentRepository _departmentRepository;
+
+        public DepartmentController(IDepartmentRepository departmentRepository)
         {
-            _departmentReposatory = departmentReposatory;
+            _departmentRepository = departmentRepository;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var departments = _departmentReposatory.GetAll();
+            var departments = _departmentRepository.GetAll();
             return View(departments);
         }
 
@@ -31,23 +30,28 @@ namespace MVC02.Abdallah.PL.Controllers
         [HttpPost]
         public IActionResult Create(CreateDepartmentDto model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var department = new Department()
                 {
-                    Code=model.Code,
-                    Name=model.Name,
+                    Code = model.Code,
+                    Name = model.Name,
                     CreateAt = model.CreateAt
                 };
-              var count=  _departmentReposatory.Add(department);
+                var count = _departmentRepository.Add(department);
 
-                if (count > 0) 
-                {
+                if (count > 0)
                     return RedirectToAction(nameof(Index));
-                }
-
             }
-            return View();
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var department = _departmentRepository.GetById(id);
+            if (department == null) return NotFound();
+            return View(department);
         }
     }
 }

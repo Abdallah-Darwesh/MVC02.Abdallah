@@ -1,0 +1,19 @@
+﻿@model Department
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Department Details</h1>
+<hr />
+
+<div class="mb-3">
+    <strong>Code:</strong> @Model.Code
+</div>
+<div class="mb-3">
+    <strong>Name:</strong> @Model.Name
+</div>
+<div class="mb-3">
+    <strong>Date Of Creation:</strong> @Model.CreateAt.ToShortDateString()
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

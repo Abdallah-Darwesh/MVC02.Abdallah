@@ -23,7 +23,12 @@ namespace MVC02.Abdallah.DAL.Data.Contexsts
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("server=.;Database =CompanyG02;Trusted_connection =True; TrustServerCertificate =True");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(
+                    "Server=localhost\\MSSQLSERVER03;Database=EFCoreDB;Trusted_Connection=True;TrustServerCertificate=True;"
+                );
+            }
         }
 
         public DbSet<Models.Department> Departments { get; set; }
