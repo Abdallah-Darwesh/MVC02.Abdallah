@@ -11,9 +11,9 @@ namespace MVC02.Abdallah.DAL.Data.Contexsts
     public class CompantDbContext : DbContext
     {
 
-        public CompantDbContext() :base()
+        public CompantDbContext(DbContextOptions<CompantDbContext>options) :base(options)
         {
-
+            
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace MVC02.Abdallah.DAL.Data.Contexsts
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=.;Database =CompanyG02;Trusted_connection =True; TrustServerCertificate =True");
+            //optionsBuilder.UseSqlServer("server=.;Database =CompanyG02;Trusted_connection =True; TrustServerCertificate =True");
         }
 
         public DbSet<Models.Department> Departments { get; set; }
