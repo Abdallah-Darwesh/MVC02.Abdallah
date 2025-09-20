@@ -14,9 +14,9 @@ namespace MVC02.Abdallah.BLL.Reposatiries
 
         private readonly CompantDbContext _context;
 
-        public DepartmentReposatory()
+        public DepartmentReposatory(CompantDbContext context)
         {
-            _context = new CompantDbContext();
+            _context = context;
         }
         public IEnumerable<Department> GetAll()
         { 
