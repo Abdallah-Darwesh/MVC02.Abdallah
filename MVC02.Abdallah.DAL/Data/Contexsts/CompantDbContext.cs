@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MVC02.Abdallah.DAL.Data.Contexsts
 {
-    internal class CompantDbContext : DbContext
+    public class CompantDbContext : DbContext
     {
 
         public CompantDbContext() :base()
