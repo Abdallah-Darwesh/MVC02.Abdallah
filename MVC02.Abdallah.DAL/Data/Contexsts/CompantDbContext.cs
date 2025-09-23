@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MVC02.Abdallah.DAL.Models;
 
 namespace MVC02.Abdallah.DAL.Data.Contexsts
 {
@@ -32,5 +33,7 @@ namespace MVC02.Abdallah.DAL.Data.Contexsts
         }
 
         public DbSet<Models.Department> Departments { get; set; }
+
+        public DbSet<Employees> Employees { get; set; }
     }
 }
