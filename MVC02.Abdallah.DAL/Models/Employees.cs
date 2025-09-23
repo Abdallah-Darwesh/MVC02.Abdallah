@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace MVC02.Abdallah.DAL.Models
 {
-    public class Employees
+    public class Employees: BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime HireDate { get; set; }
