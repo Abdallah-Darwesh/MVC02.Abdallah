@@ -7,14 +7,14 @@ using MVC02.Abdallah.DAL.Models;
 
 namespace MVC02.Abdallah.BLL.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository: IGenaricReposatory<Department>
     {
-        IEnumerable<Department> GetAll();
-        Department GetById(int id);
+        //IEnumerable<Department> GetAll();
+        //Department GetById(int id);
 
-        int Add(Department department);
-        int Update(Department department);
-        int Delete(Department department);
+        //int Add(Department department);
+        //int Update(Department department);
+        //int Delete(Department department);
 
     }
 }
