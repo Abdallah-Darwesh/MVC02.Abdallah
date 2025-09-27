@@ -23,6 +23,14 @@ namespace MVC02.Abdallah.DAL.Data.Configrations
             builder.Property(e => e.CreateAt).HasDefaultValueSql("GETDATE()");
             builder.Property(e => e.isActive).HasDefaultValue(true);
             builder.Property(e => e.isDeleted).HasDefaultValue(false);
+
+            builder.HasOne(e => e.Department)
+                   .WithMany(d => d.Employees)
+                   .HasForeignKey(e => e.DepartmentId)
+                   .OnDelete(DeleteBehavior.SetNull);
+
+
         }
+
     }
 }

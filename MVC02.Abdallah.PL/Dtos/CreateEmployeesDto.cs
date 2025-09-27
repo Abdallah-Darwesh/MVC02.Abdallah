@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MVC02.Abdallah.DAL.Models;
 
 namespace MVC02.Abdallah.PL.Dtos
 {
@@ -34,5 +35,9 @@ namespace MVC02.Abdallah.PL.Dtos
 
         [Range(0, 1000000, ErrorMessage = "Salary must be between 0 and 1,000,000")]
         public decimal Salary { get; set; }
+        public int? DepartmentId { get; set; }
+
+        public Department? Department { get; set; }
+
     }
 }
