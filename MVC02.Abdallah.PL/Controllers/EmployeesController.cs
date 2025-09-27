@@ -9,50 +9,75 @@ namespace MVC02.Abdallah.PL.Controllers
     public class EmployeesController : Controller
     {
         private readonly IEmployeeReposatory _EmployeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeesController(IEmployeeReposatory EmployeeRepository)
+        public EmployeesController(IEmployeeReposatory EmployeeRepository,IDepartmentRepository departmentRepository)
         {
             _EmployeeRepository = EmployeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string? SearchInput)
         {
-            var Employees = _EmployeeRepository.GetAll();
+            IEnumerable<Employees> Employees;
+
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                Employees = _EmployeeRepository.GetAll();
+            }
+            else
+            {
+                Employees = _EmployeeRepository.GetEmployeeByName(SearchInput);
+            }
+
+            ViewBag.Messege = "Hello From ViewBag";
             return View(Employees);
         }
+
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments; // خليك consistent في الاسم
+            return View(new CreateEmployeesDto());
         }
+
 
         [HttpPost]
         public IActionResult Create(CreateEmployeesDto model)
         {
             if (ModelState.IsValid)
             {
-                var department = new Employees()
+                var employee = new Employees()
                 {
                     Email = model.Email,
                     Name = model.Name,
                     CreateAt = model.CreateAt,
-                    HireDate =model.HireDate,
+                    HireDate = model.HireDate,
                     isActive = model.isActive,
                     isDeleted = model.isDeleted,
                     Address = model.Address,
                     Phone = model.Phone,
                     Salary = model.Salary,
-
+                    DepartmentId = model.DepartmentId // ✅ مهم جداً
                 };
-                var count = _EmployeeRepository.Add(department);
+
+                var count = _EmployeeRepository.Add(employee);
 
                 if (count > 0)
+                {
+                    TempData["Messege"] = "Employee Created Successfully";
                     return RedirectToAction(nameof(Index));
+                }
             }
+
+            // ✅ رجّع الأقسام عشان الDropdown يرجع يشتغل
+            ViewData["departments"] = _departmentRepository.GetAll();
             return View(model);
         }
+
 
         [HttpGet]
         public IActionResult Details(int? id, string viewName = "Details")

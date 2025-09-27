@@ -13,9 +13,18 @@ namespace MVC02.Abdallah.BLL.Reposatiries
 
 
     {
+        private readonly CompantDbContext _context;
+
         public EmployeeReposatory(CompantDbContext context) : base(context)
         {
+            _context = context;
         }
+
+        public List<Employees> GetEmployeeByName(string Name)
+        {
+           return _context.Employees.Where(e => e.Name.ToLower().Contains(Name.ToLower())).ToList();
+        }
+
     }
 
 

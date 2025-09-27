@@ -3,7 +3,13 @@
     ViewData["Title"] = "Create Employee";
 }
 
+@{
+	var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>,"Id","Name");
+}
+
 <h1>Create New Employee</h1>
+
+
 
 <form asp-action="Create" method="post">
 
@@ -47,6 +53,14 @@
         <label asp-for="Salary" class="form-label"></label>
         <input asp-for="Salary" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+    <div class="my-3">
+        <label asp-for="DepartmentId" class="form-label"></label>
+
+        <select asp-for="DepartmentId" asp-items="Departments">
+            
+        </select>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
     </div>
 
     <div class="my-3 form-check">

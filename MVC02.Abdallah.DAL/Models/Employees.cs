@@ -18,7 +18,10 @@ namespace MVC02.Abdallah.DAL.Models
         public string Phone { get; set; }
 
         public decimal Salary { get; set; }
-        
+
+        public int? DepartmentId { get; set; }
+
+        public Department? Department { get; set; }
 
     }
 }

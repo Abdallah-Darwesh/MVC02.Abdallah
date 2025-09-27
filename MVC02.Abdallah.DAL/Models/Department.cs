@@ -12,6 +12,8 @@ namespace MVC02.Abdallah.DAL.Models
         public string Name { get; set; }
 
         public DateTime CreateAt { get; set; }
-    
+
+        public List<Employees> Employees { get; set; }
+
     }
 }
