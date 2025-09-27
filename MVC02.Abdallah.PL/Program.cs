@@ -17,6 +17,8 @@ namespace MVC02.Abdallah.PL
             // Register your repos
             builder.Services.AddScoped<IDepartmentRepository, DepartmentReposatory>();
 
+
+            builder.Services.AddScoped<IEmployeeReposatory, EmployeeReposatory>();
             // Register DbContext
             builder.Services.AddDbContext<CompantDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))

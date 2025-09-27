@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVC02.Abdallah.BLL.Interfaces;
+using MVC02.Abdallah.BLL.Reposatiries;
 using MVC02.Abdallah.DAL.Models;
 using MVC02.Abdallah.PL.Dtos;
 
 namespace MVC02.Abdallah.PL.Controllers
 {
-    public class DepartmentController : Controller
+    public class EmployeesController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IEmployeeReposatory _EmployeeRepository;
 
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        public EmployeesController(IEmployeeReposatory EmployeeRepository)
         {
-            _departmentRepository = departmentRepository;
+            _EmployeeRepository = EmployeeRepository;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var departments = _departmentRepository.GetAll();
-            return View(departments);
+            var Employees = _EmployeeRepository.GetAll();
+            return View(Employees);
         }
 
         [HttpGet]
@@ -28,30 +29,37 @@ namespace MVC02.Abdallah.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto model)
+        public IActionResult Create(CreateEmployeesDto model)
         {
             if (ModelState.IsValid)
             {
-                var department = new Department()
+                var department = new Employees()
                 {
-                    Code = model.Code,
+                    Email = model.Email,
                     Name = model.Name,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    HireDate =model.HireDate,
+                    isActive = model.isActive,
+                    isDeleted = model.isDeleted,
+                    Address = model.Address,
+                    Phone = model.Phone,
+                    Salary = model.Salary,
+
                 };
-                var count = _departmentRepository.Add(department);
+                var count = _EmployeeRepository.Add(department);
 
                 if (count > 0)
                     return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
-        
+
         [HttpGet]
-        public IActionResult Details(int? id,string viewName="Details")
+        public IActionResult Details(int? id, string viewName = "Details")
         {
-            var department = _departmentRepository.Get(id.Value );
+            var department = _EmployeeRepository.Get(id.Value);
             if (department == null) return NotFound();
-            return View(viewName,department);
+            return View(viewName, department);
         }
 
         [HttpGet]
@@ -62,24 +70,24 @@ namespace MVC02.Abdallah.PL.Controllers
             //if (department is null) return NotFound();
 
             return Details(id, "Edit");
-        
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Department department)
+        public IActionResult Edit([FromRoute] int id, Employees Employee)
         {
             if (ModelState.IsValid)
             {
-                if(id != department.Id) return BadRequest();
-                var count = _departmentRepository.Update(department);
+                if (id != Employee.Id) return BadRequest();
+                var count = _EmployeeRepository.Update(Employee);
                 if (count > 0)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
+                {
+                    return RedirectToAction(nameof(Index));
+                }
 
             }
-            return View(department);
+            return View(Employee);
 
         }
 
@@ -96,21 +104,20 @@ namespace MVC02.Abdallah.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Department department)
+        public IActionResult Delete([FromRoute] int id, Employees Employee)
         {
             if (ModelState.IsValid)
             {
-                if (id != department.Id) return BadRequest();
-                var count = _departmentRepository.Delete(department);
+                if (id != Employee.Id) return BadRequest();
+                var count = _EmployeeRepository.Delete(Employee);
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
                 }
 
             }
-            return View(department);
+            return View(Employee);
 
         }
-
     }
 }
