@@ -1,0 +1,48 @@
+﻿@model Employees
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h1>Employee Details</h1>
+<hr />
+
+<div class="mb-3">
+    <strong>Name:</strong> @Model.Name
+</div>
+
+<div class="mb-3">
+    <strong>Email:</strong> @Model.Email
+</div>
+
+<div class="mb-3">
+    <strong>Hire Date:</strong> @Model.HireDate.ToShortDateString()
+</div>
+
+<div class="mb-3">
+    <strong>Date of Creation:</strong> @Model.CreateAt.ToShortDateString()
+</div>
+
+<div class="mb-3">
+    <strong>Address:</strong> @Model.Address
+</div>
+
+<div class="mb-3">
+    <strong>Phone:</strong> @Model.Phone
+</div>
+
+<div class="mb-3">
+    <strong>Salary:</strong> @Model.Salary
+</div>
+
+<div class="mb-3">
+    <strong>Active:</strong> @(Model.isActive ? "Yes" : "No")
+</div>
+
+<div class="mb-3">
+    <strong>Deleted:</strong> @(Model.isDeleted ? "Yes" : "No")
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

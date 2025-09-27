@@ -9,11 +9,11 @@ using MVC02.Abdallah.DAL.Models;
 
 namespace MVC02.Abdallah.BLL.Reposatiries
 {
-    public class EmployeeReopsatory :GenericRepository<Employees> , IEmployeeReposatory
+    public class EmployeeReposatory :GenericRepository<Employees> , IEmployeeReposatory
 
 
     {
-        public EmployeeReopsatory(CompantDbContext context) : base(context)
+        public EmployeeReposatory(CompantDbContext context) : base(context)
         {
         }
     }
