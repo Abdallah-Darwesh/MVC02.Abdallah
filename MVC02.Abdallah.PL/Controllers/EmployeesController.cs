@@ -4,11 +4,13 @@ using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.BLL.Reposatiries;
 using MVC02.Abdallah.DAL.Models;
 using MVC02.Abdallah.PL.Dtos;
+using MVC02.Abdallah.PL.Helpers;
 
 namespace MVC02.Abdallah.PL.Controllers
 {
     public class EmployeesController : Controller
     {
+
 
         //private readonly IEmployeeReposatory _EmployeeRepository;
         //private readonly IDepartmentRepository _departmentRepository;
@@ -44,8 +46,10 @@ namespace MVC02.Abdallah.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var departments = _unitofwork.DepartmentRepository.GetAll();
-            ViewData["departments"] = departments; // خليك consistent في الاسم
+           
+                var departments = _unitofwork.DepartmentRepository.GetAll();
+                ViewData["departments"] = departments;
+            
             return View(new CreateEmployeesDto());
         }
 
@@ -66,9 +70,15 @@ namespace MVC02.Abdallah.PL.Controllers
                 //    Address = model.Address,
                 //    Phone = model.Phone,
                 //    Salary = model.Salary,
-                //    DepartmentId = model.DepartmentId // ✅ مهم جداً
+                //    DepartmentId = model.DepartmentId 
                 //};
-                var employee=_mapper.Map<Employees>(model);
+
+                if(model.image is not null)
+                {
+                    model.imageName = DocumentSettings.UploadFile(model.image, "Images");
+                }
+
+                var employee =_mapper.Map<Employees>(model);
 
                  _unitofwork.EmployeeRepository.Add(employee);
                 var count = _unitofwork.Complete();
@@ -106,10 +116,20 @@ namespace MVC02.Abdallah.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employees Employee)
+        public IActionResult Edit([FromRoute] int id, Employees Employee,CreateEmployeesDto model)
         {
             if (ModelState.IsValid)
             {
+                if(model.imageName is not null)
+                {
+                    DocumentSettings.DeleteFile(model.imageName, "Images");
+                }
+                else
+                {
+                    DocumentSettings.UploadFile(model.image, "Images");
+
+                }
+
                 if (id != Employee.Id) return BadRequest();
                _unitofwork.EmployeeRepository.Update(Employee);
                 var count = _unitofwork.Complete();
@@ -147,6 +167,11 @@ namespace MVC02.Abdallah.PL.Controllers
 
                 if (count > 0)
                 {
+                    if(Employee.ImageName is not null)
+                    {
+                    DocumentSettings.DeleteFile(Employee.ImageName, "Images");
+
+                    }
                     return RedirectToAction(nameof(Index));
                 }
 

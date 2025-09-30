@@ -39,5 +39,7 @@ namespace MVC02.Abdallah.PL.Dtos
 
         public Department? Department { get; set; }
 
+        public string? imageName { get; set; }
+        public IFormFile? image {  get; set; }
     }
 }

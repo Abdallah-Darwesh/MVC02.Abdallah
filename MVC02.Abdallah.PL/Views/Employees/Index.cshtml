@@ -33,6 +33,7 @@
         <table class="table table-bordered table-striped text-center align-middle">
             <thead class="table-dark">
                 <tr>
+                    <th>Image</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Salary</th>
@@ -44,6 +45,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td>
+                            <img src="~/Files/Images/@item.ImageName" style="width:50px;height:auto;" />
+                        </td>
                         <td>@item.Name</td>
                         <td>@item.Email</td>
                         <td>@item.Salary</td>

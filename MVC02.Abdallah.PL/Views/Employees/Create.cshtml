@@ -11,7 +11,7 @@
 
 
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" enctype="multipart/form-data" method="post">
 
     <div class="my-3">
         <label asp-for="Name" class="form-label"></label>
@@ -55,6 +55,11 @@
         <span asp-validation-for="Salary" class="text-danger"></span>
     </div>
     <div class="my-3">
+        <label asp-for="image" class="form-label"></label>
+        <input asp-for="image" class="form-control"  />
+    </div>
+
+    <div class="my-3">
         <label asp-for="DepartmentId" class="form-label"></label>
 
         <select asp-for="DepartmentId" asp-items="Departments">
@@ -77,6 +82,7 @@
         <input type="submit" value="Create" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back To List</a>
     </div>
+
 </form>
 @section Scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
