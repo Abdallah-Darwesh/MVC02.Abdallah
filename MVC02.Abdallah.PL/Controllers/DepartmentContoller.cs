@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.DAL.Models;
 using MVC02.Abdallah.PL.Dtos;
@@ -7,17 +8,21 @@ namespace MVC02.Abdallah.PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOFWork _unitofwork;
+        private readonly IMapper _mapper;
+        //private readonly IDepartmentRepository _departmentRepository;
 
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        public DepartmentController(IUnitOFWork unitofwork,IMapper mapper)
         {
-            _departmentRepository = departmentRepository;
+            _unitofwork = unitofwork;
+           _mapper = mapper;
+            //_departmentRepository = departmentRepository;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitofwork.DepartmentRepository.GetAll();
             return View(departments);
         }
 
@@ -38,7 +43,8 @@ namespace MVC02.Abdallah.PL.Controllers
                     Name = model.Name,
                     CreateAt = model.CreateAt
                 };
-                var count = _departmentRepository.Add(department);
+                _unitofwork.DepartmentRepository.Add(department);
+                var count = _unitofwork.Complete();
 
                 if (count > 0)
                     return RedirectToAction(nameof(Index));
@@ -49,7 +55,7 @@ namespace MVC02.Abdallah.PL.Controllers
         [HttpGet]
         public IActionResult Details(int? id,string viewName="Details")
         {
-            var department = _departmentRepository.Get(id.Value );
+            var department = _unitofwork.DepartmentRepository.Get(id.Value );
             if (department == null) return NotFound();
             return View(viewName,department);
         }
@@ -72,7 +78,9 @@ namespace MVC02.Abdallah.PL.Controllers
             if (ModelState.IsValid)
             {
                 if(id != department.Id) return BadRequest();
-                var count = _departmentRepository.Update(department);
+                 _unitofwork.DepartmentRepository.Update(department);
+                var count = _unitofwork.Complete();
+
                 if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
@@ -101,7 +109,10 @@ namespace MVC02.Abdallah.PL.Controllers
             if (ModelState.IsValid)
             {
                 if (id != department.Id) return BadRequest();
-                var count = _departmentRepository.Delete(department);
+                
+                _unitofwork.DepartmentRepository.Delete(department);
+                var count = _unitofwork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));

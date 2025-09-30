@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.BLL.Reposatiries;
 using MVC02.Abdallah.DAL.Models;
@@ -8,13 +9,17 @@ namespace MVC02.Abdallah.PL.Controllers
 {
     public class EmployeesController : Controller
     {
-        private readonly IEmployeeReposatory _EmployeeRepository;
-        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeesController(IEmployeeReposatory EmployeeRepository,IDepartmentRepository departmentRepository)
+        //private readonly IEmployeeReposatory _EmployeeRepository;
+        //private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOFWork _unitofwork;
+        public EmployeesController(IUnitOFWork unitofwork, IMapper mapper)
         {
-            _EmployeeRepository = EmployeeRepository;
-            _departmentRepository = departmentRepository;
+            //_EmployeeRepository = EmployeeRepository;
+            //_departmentRepository = departmentRepository;
+            _mapper = mapper;
+            _unitofwork = unitofwork;
         }
 
         [HttpGet]
@@ -24,11 +29,11 @@ namespace MVC02.Abdallah.PL.Controllers
 
             if (string.IsNullOrEmpty(SearchInput))
             {
-                Employees = _EmployeeRepository.GetAll();
+                Employees = _unitofwork.EmployeeRepository.GetAll();
             }
             else
             {
-                Employees = _EmployeeRepository.GetEmployeeByName(SearchInput);
+                Employees = _unitofwork.EmployeeRepository.GetEmployeeByName(SearchInput);
             }
 
             ViewBag.Messege = "Hello From ViewBag";
@@ -39,7 +44,7 @@ namespace MVC02.Abdallah.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitofwork.DepartmentRepository.GetAll();
             ViewData["departments"] = departments; // خليك consistent في الاسم
             return View(new CreateEmployeesDto());
         }
@@ -50,21 +55,23 @@ namespace MVC02.Abdallah.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var employee = new Employees()
-                {
-                    Email = model.Email,
-                    Name = model.Name,
-                    CreateAt = model.CreateAt,
-                    HireDate = model.HireDate,
-                    isActive = model.isActive,
-                    isDeleted = model.isDeleted,
-                    Address = model.Address,
-                    Phone = model.Phone,
-                    Salary = model.Salary,
-                    DepartmentId = model.DepartmentId // ✅ مهم جداً
-                };
+                //var employee = new Employees()
+                //{
+                //    Email = model.Email,
+                //    Name = model.Name,
+                //    CreateAt = model.CreateAt,
+                //    HireDate = model.HireDate,
+                //    isActive = model.isActive,
+                //    isDeleted = model.isDeleted,
+                //    Address = model.Address,
+                //    Phone = model.Phone,
+                //    Salary = model.Salary,
+                //    DepartmentId = model.DepartmentId // ✅ مهم جداً
+                //};
+                var employee=_mapper.Map<Employees>(model);
 
-                var count = _EmployeeRepository.Add(employee);
+                 _unitofwork.EmployeeRepository.Add(employee);
+                var count = _unitofwork.Complete();
 
                 if (count > 0)
                 {
@@ -73,8 +80,7 @@ namespace MVC02.Abdallah.PL.Controllers
                 }
             }
 
-            // ✅ رجّع الأقسام عشان الDropdown يرجع يشتغل
-            ViewData["departments"] = _departmentRepository.GetAll();
+            ViewData["departments"] = _unitofwork.DepartmentRepository.GetAll();
             return View(model);
         }
 
@@ -82,7 +88,7 @@ namespace MVC02.Abdallah.PL.Controllers
         [HttpGet]
         public IActionResult Details(int? id, string viewName = "Details")
         {
-            var department = _EmployeeRepository.Get(id.Value);
+            var department = _unitofwork.EmployeeRepository.Get(id.Value);
             if (department == null) return NotFound();
             return View(viewName, department);
         }
@@ -105,7 +111,9 @@ namespace MVC02.Abdallah.PL.Controllers
             if (ModelState.IsValid)
             {
                 if (id != Employee.Id) return BadRequest();
-                var count = _EmployeeRepository.Update(Employee);
+               _unitofwork.EmployeeRepository.Update(Employee);
+                var count = _unitofwork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -134,7 +142,9 @@ namespace MVC02.Abdallah.PL.Controllers
             if (ModelState.IsValid)
             {
                 if (id != Employee.Id) return BadRequest();
-                var count = _EmployeeRepository.Delete(Employee);
+                   _unitofwork.EmployeeRepository.Delete(Employee);
+                var count = _unitofwork.Complete();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
