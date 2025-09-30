@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.BLL.Reposatiries;
 using MVC02.Abdallah.DAL.Data.Contexsts;
+using MVC02.Abdallah.PL.Mapping;
 
 namespace MVC02.Abdallah.PL
 {
@@ -14,7 +15,7 @@ namespace MVC02.Abdallah.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Register your repos
+            // Register your reposatory
             builder.Services.AddScoped<IDepartmentRepository, DepartmentReposatory>();
 
 
@@ -23,6 +24,10 @@ namespace MVC02.Abdallah.PL
             builder.Services.AddDbContext<CompantDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
+
+            builder.Services.AddScoped<IUnitOFWork, UnitOfWork>();
+
+            builder.Services.AddAutoMapper(M=>M.AddProfile(new EmployeeProfile()));
 
             // Build the app
             var app = builder.Build();
