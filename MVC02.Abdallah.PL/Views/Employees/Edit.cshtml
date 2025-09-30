@@ -5,7 +5,7 @@
 
 <h1>Edit Employee</h1>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" enctype="multipart/form-data" method="post">
 
     <div class="my-3">
         <label asp-for="Name" class="form-label"></label>
@@ -48,6 +48,9 @@
         <input asp-for="Salary" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Salary" class="text-danger"></span>
     </div>
+
+
+    <input asp-for="ImageName" hidden />
 
     <div class="my-3 form-check">
         <input asp-for="isActive" class="form-check-input" />
