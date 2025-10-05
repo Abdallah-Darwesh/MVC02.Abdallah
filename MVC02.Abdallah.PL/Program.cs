@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.BLL.Reposatiries;
@@ -11,8 +12,9 @@ namespace MVC02.Abdallah.PL
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
+            //injection Identity
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<CompantDbContext>();                      // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             // Register your reposatory

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.BLL.Reposatiries;
@@ -23,6 +24,7 @@ namespace MVC02.Abdallah.PL.Controllers
             _mapper = mapper;
             _unitofwork = unitofwork;
         }
+        [Authorize]
 
         [HttpGet]
         public IActionResult Index(string? SearchInput)

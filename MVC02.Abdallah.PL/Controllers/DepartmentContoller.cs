@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC02.Abdallah.BLL.Interfaces;
 using MVC02.Abdallah.DAL.Models;
@@ -18,6 +19,8 @@ namespace MVC02.Abdallah.PL.Controllers
            _mapper = mapper;
             //_departmentRepository = departmentRepository;
         }
+        [Authorize]
+
 
         [HttpGet]
         public IActionResult Index()
